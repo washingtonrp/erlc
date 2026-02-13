@@ -2,106 +2,116 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Washington D.C. | Election 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>Washington D.C. | Election Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #000; --red: #ff3b30; --blue: #007aff; --latte: #6366f1; --border: rgba(255,255,255,0.1); }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        :root { 
+            --bg: #050505; --red: #ff3b30; --blue: #007aff; --latte: #6366f1; 
+            --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); 
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { 
-            background: var(--bg); color: #fff; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; min-height: 100vh; text-align: center;
-            background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
+        body { background: var(--bg); color: #fff; line-height: 1.6; overflow-x: hidden; }
+
+        /* Admin Header - Modern Minimalist */
+        .admin-panel { 
+            padding: env(safe-area-inset-top) 20px 20px; 
+            background: rgba(10,10,10,0.8); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border); text-align: center;
+        }
+        .admin-panel h3 { font-size: 0.7rem; color: var(--latte); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px; }
+        .admin-input { 
+            background: #111; border: 1px solid #222; color: white; padding: 14px; 
+            border-radius: 12px; margin: 5px; width: 100%; max-width: 250px; font-size: 16px; /* 16px prevents iOS zoom-in */
+        }
+        .admin-btn { 
+            background: var(--latte); color: white; border: none; padding: 14px 30px; 
+            border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; max-width: 250px; margin-top: 10px;
         }
 
-        .header { margin-bottom: 40px; }
-        .header h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; }
-        .header p { color: var(--latte); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; }
-
+        /* Lock Screen */
+        .lock-screen { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 20px; }
+        .closed-tag { background: rgba(255, 59, 48, 0.1); color: var(--red); padding: 6px 15px; border-radius: 50px; font-weight: 900; font-size: 0.7rem; margin-bottom: 15px; border: 1px solid rgba(255, 59, 48, 0.2); }
+        .reopen-text { font-size: 1.1rem; color: #888; }
+        #timer { font-size: clamp(2.5rem, 12vw, 5rem); font-weight: 900; margin: 10px 0 30px; letter-spacing: -2px; }
+        
+        /* Voting Cards - Glassmorphism */
+        .content-section { padding: 40px 20px env(safe-area-inset-bottom); display: flex; flex-direction: column; align-items: center; }
+        #voting-system { display: none; width: 100%; max-width: 400px; }
+        
         .voter-card { 
-            background: rgba(255,255,255,0.03); border: 1px solid var(--border); 
-            padding: 60px 40px; border-radius: 40px; width: 100%; max-width: 420px; 
-            display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: var(--glass); border: 1px solid var(--border); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 60px 30px; border-radius: 40px; display: none;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-        .voter-card.active { display: block; animation: slideUp 0.4s ease-out; }
+        .voter-card.active { display: block; animation: cardSlide 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        @keyframes cardSlide { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* THE SHAKING ANIMATION */
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-
-        .candidate-name { font-size: 2.5rem; font-weight: 900; margin-bottom: 40px; line-height: 1; }
+        .candidate-name { font-size: 2.4rem; font-weight: 900; margin-bottom: 40px; letter-spacing: -1px; }
+        
+        /* Big Mobile Buttons */
         .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
         .btn { 
-            height: 75px; border-radius: 20px; border: 1px solid var(--border); 
-            background: rgba(255,255,255,0.05); color: white; font-size: 1.1rem; 
-            font-weight: 800; cursor: pointer; transition: 0.2s;
+            height: 80px; border-radius: 24px; border: 1px solid var(--border); 
+            background: rgba(255,255,255,0.05); color: white; font-size: 1.5rem; 
+            display: flex; align-items: center; justify-content: center; transition: 0.2s;
         }
-        
-        .btn-check { background: #fff; color: #000; border: none; }
-        .btn-check:hover { 
-            background: var(--latte); 
-            color: #fff; 
-            animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-        }
+        .btn-check { background: #fff; color: #000; border: none; font-weight: bold; }
+        .btn:active { transform: scale(0.95); }
 
-        #success, #already-voted { display: none; }
+        .service-footer { margin-top: 60px; text-align: center; color: #333; font-weight: 800; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>WASHINGTON D.C.</h1>
-        <p>Official Voting Terminal</p>
+    <div class="admin-panel" id="admin-bar">
+        <h3>Admin Access Panel</h3>
+        <input type="text" id="admin-user" class="admin-input" placeholder="Username">
+        <input type="password" id="admin-pass" class="admin-input" placeholder="Password">
+        <button class="admin-btn" onclick="checkAdmin()">Unlock Early Access</button>
     </div>
 
-    <div id="ballot-box">
-        <div id="c1" class="voter-card active">
-            <p style="color: var(--red); font-weight: 900; margin-bottom: 10px; letter-spacing: 2px;">REPUBLICAN</p>
-            <h2 class="candidate-name">Jack Waterson</h2>
-            <div class="btns">
-                <button class="btn" onclick="next('c2')">SKIP</button>
-                <button class="btn btn-check" onclick="cast('waterson', 'Jack Waterson', 'Republican')">VOTE</button>
+    <section class="lock-screen" id="lock-screen">
+        <div class="closed-tag">STRICTLY CLOSED</div>
+        <div class="reopen-text">Reopening in:</div>
+        <div id="timer">00:00:00:00</div>
+        <p style="color:#444; font-size:0.7rem;">LATTE PERFORMANCE SECURE GATEWAY</p>
+    </section>
+
+    <section class="content-section">
+        <div id="voting-system">
+            <div id="c1" class="voter-card active">
+                <p style="color:var(--red); font-weight:900; font-size:0.8rem; letter-spacing:3px; margin-bottom:10px;">GOP NOMINEE</p>
+                <h2 class="candidate-name">Jack Waterson</h2>
+                <div class="btns">
+                    <button class="btn" onclick="next('c2')">SKIP</button>
+                    <button class="btn btn-check" onclick="cast('waterson')">VOTE</button>
+                </div>
+            </div>
+            <div id="c2" class="voter-card">
+                <p style="color:var(--blue); font-weight:900; font-size:0.8rem; letter-spacing:3px; margin-bottom:10px;">DEM NOMINEE</p>
+                <h2 class="candidate-name">Lian Roosevelt</h2>
+                <div class="btns">
+                    <button class="btn" onclick="next('c3')">SKIP</button>
+                    <button class="btn btn-check" onclick="cast('roosevelt')">VOTE</button>
+                </div>
+            </div>
+            <div id="c3" class="voter-card">
+                <p style="color:var(--blue); font-weight:900; font-size:0.8rem; letter-spacing:3px; margin-bottom:10px;">DEM NOMINEE</p>
+                <h2 class="candidate-name">D. Johnson</h2>
+                <div class="btns">
+                    <button class="btn" onclick="next('c1')">SKIP</button>
+                    <button class="btn btn-check" onclick="cast('johnson')">VOTE</button>
+                </div>
             </div>
         </div>
-
-        <div id="c2" class="voter-card">
-            <p style="color: var(--blue); font-weight: 900; margin-bottom: 10px; letter-spacing: 2px;">DEMOCRAT</p>
-            <h2 class="candidate-name">Lian Roosevelt</h2>
-            <div class="btns">
-                <button class="btn" onclick="next('c3')">SKIP</button>
-                <button class="btn btn-check" onclick="cast('roosevelt', 'Lian Roosevelt', 'Democrat')">VOTE</button>
-            </div>
+        
+        <div class="service-footer" id="service-info">
+            Provided via Latte Performance<br>March 1st, 6:00AM EST
         </div>
-
-        <div id="c3" class="voter-card">
-            <p style="color: var(--blue); font-weight: 900; margin-bottom: 10px; letter-spacing: 2px;">DEMOCRAT</p>
-            <h2 class="candidate-name">D. Johnson</h2>
-            <div class="btns">
-                <button class="btn" onclick="next('c1')">SKIP</button>
-                <button class="btn btn-check" onclick="cast('johnson', 'D. Johnson', 'Democrat')">VOTE</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="success">
-        <h1 style="color: var(--latte); font-size: 3.5rem; font-weight: 900;">VOTE LOGGED</h1>
-        <p style="color: #444; font-weight: 700;">TRANSMISSION COMPLETE</p>
-    </div>
-
-    <div id="already-voted">
-        <h1 style="color: #ff3b30; font-size: 2.5rem; font-weight: 900;">ACCESS DENIED</h1>
-        <p style="color: #444; font-weight: 700;">YOU HAVE ALREADY CAST A BALLOT.</p>
-    </div>
+    </section>
 
     <script>
         const WEBHOOKS = {
@@ -110,46 +120,52 @@
             johnson: "https://discord.com/api/webhooks/1471613087743213571/Wz7w9ClyUhBmaOXSow1grufF3m9d2aZoRwybgOaEZhoik1QRYxwmni4zP_akvF92Tb8A"
         };
 
-        // --- PREVENT RE-VOTING LOGIC ---
-        window.onload = function() {
-            if (localStorage.getItem("hasVoted") === "true") {
-                document.getElementById('ballot-box').style.display = 'none';
-                document.getElementById('already-voted').style.display = 'block';
-            }
-        };
+        const target = new Date("March 1, 2026 06:00:00 EST").getTime();
+
+        function checkAdmin() {
+            if(document.getElementById('admin-user').value === "WashingtonDC" && 
+               document.getElementById('admin-pass').value === "DCDCDC1234") {
+                unlockSystem();
+            } else { alert("Access Denied."); }
+        }
+
+        function unlockSystem() {
+            document.getElementById('lock-screen').style.display = 'none';
+            document.getElementById('voting-system').style.display = 'block';
+            document.getElementById('admin-bar').style.display = 'none';
+            document.getElementById('service-info').innerText = "Early Voting Session Active";
+        }
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = target - now;
+            if (diff <= 0) { unlockSystem(); return; }
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('timer').innerText = `${d}:${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
 
         function next(id) {
             document.querySelectorAll('.voter-card').forEach(c => c.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
-        async function cast(key, name, party) {
-            // Save to browser so they can't vote again
-            localStorage.setItem("hasVoted", "true");
-
-            const url = WEBHOOKS[key];
-            const payload = {
-                content: "🗳️ **NEW OFFICIAL BALLOT**",
-                embeds: [{
-                    title: "Vote Confirmed",
-                    description: `A citizen has cast their vote for **${name}**.`,
-                    color: party === 'Republican' ? 16725776 : 30975,
-                    fields: [
-                        { name: "Candidate", value: name, inline: true },
-                        { name: "Party", value: party, inline: true }
-                    ],
-                    timestamp: new Date()
-                }]
-            };
-
-            fetch(url, {
+        function cast(key) {
+            if(localStorage.getItem('rp_vote_cast')) return alert("You have already voted.");
+            fetch(WEBHOOKS[key], {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).catch(() => {});
-
-            document.getElementById('ballot-box').style.display = 'none';
-            document.getElementById('success').style.display = 'block';
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ embeds: [{ title: "🗳️ NEW VOTE", description: `Candidate: ${key.toUpperCase()}`, color: key === 'waterson' ? 16725776 : 30975, timestamp: new Date() }] })
+            }).then(() => {
+                localStorage.setItem('rp_vote_cast', 'true');
+                alert("Ballot cast successfully.");
+                location.reload();
+            });
         }
     </script>
 </body>
