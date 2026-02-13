@@ -15,49 +15,22 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background: var(--bg); 
-            color: #fff; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh; 
-            padding: 0 20px 40px 20px; 
-            text-align: center;
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #151515 0%, #000 100%);
+            background: var(--bg); color: #fff; display: flex; flex-direction: column; 
+            align-items: center; min-height: 100vh; padding: 0 20px 40px 20px; text-align: center;
+            overflow-x: hidden; background-image: radial-gradient(circle at 50% 50%, #151515 0%, #000 100%);
         }
 
-        /* Tiny Pink Banner */
         .pink-banner {
-            background: var(--pink);
-            color: #000;
-            width: 100vw;
-            padding: 8px 0;
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 0 20px rgba(255, 133, 162, 0.3);
-            animation: slideDownBanner 0.6s ease-out;
-            margin-bottom: 40px;
+            background: var(--pink); color: #000; width: 100vw; padding: 8px 0;
+            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            box-shadow: 0 0 20px rgba(255, 133, 162, 0.3); animation: slideDownBanner 0.6s ease-out; margin-bottom: 40px;
         }
 
-        /* Background Bloom Animation */
         body::before {
-            content: "";
-            position: fixed;
-            top: 20%; left: 50%;
-            width: 400px; height: 400px;
-            background: var(--latte);
-            filter: blur(150px);
-            opacity: 0.15;
-            z-index: -1;
-            transform: translate(-50%, -50%);
-            animation: pulseBloom 8s infinite alternate;
+            content: ""; position: fixed; top: 20%; left: 50%; width: 400px; height: 400px;
+            background: var(--latte); filter: blur(150px); opacity: 0.15; z-index: -1;
+            transform: translate(-50%, -50%); animation: pulseBloom 8s infinite alternate;
         }
 
         .header { margin-bottom: 40px; animation: fadeIn 1.2s ease; }
@@ -67,26 +40,17 @@
         #ballot-container { width: 100%; max-width: 450px; perspective: 1200px; z-index: 10; }
 
         .voter-card { 
-            background: var(--glass); 
-            border: 1px solid var(--border); 
-            backdrop-filter: blur(25px); 
-            padding: 60px 30px; 
-            border-radius: 40px; 
-            display: none;
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
-            transform-style: preserve-3d;
+            background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(25px); 
+            padding: 60px 30px; border-radius: 40px; display: none;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8); transform-style: preserve-3d;
         }
         
-        .voter-card.active { 
-            display: block; 
-            animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1); 
-        }
+        .voter-card.active { display: block; animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
 
         .party-tag { font-size: 0.8rem; font-weight: 900; margin-bottom: 10px; letter-spacing: 4px; opacity: 0.8; }
         .candidate-name { font-size: 3rem; font-weight: 900; margin-bottom: 40px; line-height: 0.9; letter-spacing: -1px; }
         
         .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        
         .btn { 
             height: 75px; border-radius: 22px; border: 1px solid var(--border); 
             background: rgba(255,255,255,0.05); color: white; font-size: 1rem; 
@@ -94,32 +58,20 @@
             text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .btn-check { background: #fff; color: #000; border: none; box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
+        .btn-check { background: #fff; color: #000; border: none; }
         .btn-check:hover { background: var(--latte); color: white; transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4); }
-        .btn:hover:not(.btn-check) { background: rgba(255,255,255,0.1); border-color: #fff; }
 
-        #success-screen { display: none; padding: 60px 20px; animation: scaleUp 0.5s ease; }
-        #success-screen h2 { color: var(--latte); font-size: 2.8rem; font-weight: 900; margin-bottom: 15px; letter-spacing: -1px; }
-
-        #voted-lockout { display: none; padding: 60px 20px; animation: fadeIn 1s ease; }
-        #voted-lockout h2 { color: var(--red); font-size: 2rem; font-weight: 900; }
+        #success-screen, #voted-lockout { display: none; padding: 40px 20px; animation: cardIn 0.7s ease; }
+        
+        /* Stats Styling */
+        .stats-box { margin-top: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid var(--border); text-align: left; }
+        .stat-line { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
 
         .footer-msg { margin-top: auto; padding-top: 60px; color: #333; font-weight: 900; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Animations */
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateZ(-200px) translateY(50px) rotateX(-15deg); }
-            to { opacity: 1; transform: translateZ(0) translateY(0) rotateX(0); }
-        }
-        @keyframes pulseBloom {
-            from { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
-            to { opacity: 0.25; transform: translate(-50%, -50%) scale(1.2); }
-        }
-        @keyframes slideDownBanner {
-            from { transform: translateY(-100%); }
-            to { transform: translateY(0); }
-        }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes cardIn { from { opacity: 0; transform: translateZ(-200px) translateY(50px) rotateX(-15deg); } to { opacity: 1; transform: translateZ(0) translateY(0) rotateX(0); } }
+        @keyframes slideDownBanner { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+        @keyframes pulseBloom { from { opacity: 0.1; transform: translate(-50%, -50%) scale(1); } to { opacity: 0.25; transform: translate(-50%, -50%) scale(1.2); } }
     </style>
 </head>
 <body onload="checkVoted()">
@@ -137,7 +89,7 @@
         <div id="voted-lockout">
             <span style="font-size: 4rem;">🚫</span>
             <h2>You already voted</h2>
-            <p style="color: #666; margin-top: 10px;"> Error 394. You have already voted. If you did not, reach out to Latte Hardware and Performance via https://discord.gg/wYkhFvtmXs or Please try again later. Thank you.</p>
+            <p style="color: #666; margin-top: 10px;">Error 394. You have already voted. If you did not, reach out to Latte Hardware and Performance. Thank you.</p>
         </div>
 
         <div id="c1" class="voter-card active">
@@ -171,12 +123,17 @@
             <span style="font-size: 4rem;">✅</span>
             <h2>BALLOT FILED</h2>
             <p style="color: #888; font-weight: 600;">Your identity has been verified and vote transmitted.</p>
+            
+            <div class="stats-box">
+                <p style="color: var(--latte); margin-bottom: 15px; font-weight: 900;">LOCAL SYSTEM TALLY:</p>
+                <div class="stat-line"><span>Waterson:</span> <span id="count-waterson">0</span></div>
+                <div class="stat-line"><span>Roosevelt:</span> <span id="count-roosevelt">0</span></div>
+                <div class="stat-line"><span>Johnson:</span> <span id="count-johnson">0</span></div>
+            </div>
         </div>
     </div>
 
-    <div class="footer-msg">
-        Vote secured and saved by Latte Performance and Hardware.
-    </div>
+    <div class="footer-msg">Vote secured and saved by Latte Performance and Hardware.</div>
 
     <script>
         const WEBHOOKS = {
@@ -185,12 +142,18 @@
             johnson: "https://discord.com/api/webhooks/1471613087743213571/Wz7w9ClyUhBmaOXSow1grufF3m9d2aZoRwybgOaEZhoik1QRYxwmni4zP_akvF92Tb8A/slack"
         };
 
-        // Check if the user has already voted on this browser
         function checkVoted() {
             if (localStorage.getItem('voted2026') === 'true') {
                 document.querySelectorAll('.voter-card').forEach(c => c.style.display = 'none');
+                showStats();
                 document.getElementById('voted-lockout').style.display = 'block';
             }
+        }
+
+        function showStats() {
+            document.getElementById('count-waterson').innerText = localStorage.getItem('v_waterson') || 0;
+            document.getElementById('count-roosevelt').innerText = localStorage.getItem('v_roosevelt') || 0;
+            document.getElementById('count-johnson').innerText = localStorage.getItem('v_johnson') || 0;
         }
 
         function next(id) {
@@ -200,11 +163,12 @@
 
         function cast(key, name, party) {
             const url = WEBHOOKS[key];
-            
             const payload = {
+                "text": `🗳️ **New Official Ballot Registered**`,
                 "attachments": [{
                     "color": party === 'Republican' ? "#ff3b30" : "#007aff",
                     "title": "VOTE ENTERED",
+                    "fallback": `Vote for ${name}`,
                     "text": `*Candidate:* ${name}\n*Party:* ${party}\n*Timestamp:* ${new Date().toLocaleString()}\n\n_Washington D.C. Election Commission Official Record_`
                 }]
             };
@@ -216,11 +180,14 @@
                 body: JSON.stringify(payload)
             });
 
-            // Set the "Already Voted" key in the browser
+            // Update Local Stats
+            let current = parseInt(localStorage.getItem('v_' + key) || 0);
+            localStorage.setItem('v_' + key, current + 1);
             localStorage.setItem('voted2026', 'true');
 
             // UI Transition
             document.querySelectorAll('.voter-card').forEach(c => c.style.display = 'none');
+            showStats();
             document.getElementById('success-screen').style.display = 'block';
         }
     </script>
