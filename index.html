@@ -63,7 +63,6 @@
 
         #success-screen, #voted-lockout { display: none; padding: 40px 20px; animation: cardIn 0.7s ease; }
         
-        /* Stats Styling */
         .stats-box { margin-top: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid var(--border); text-align: left; }
         .stat-line { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
 
@@ -89,7 +88,7 @@
         <div id="voted-lockout">
             <span style="font-size: 4rem;">🚫</span>
             <h2>You already voted</h2>
-            <p style="color: #666; margin-top: 10px;">Error 394. You have already voted. If you did not, reach out to Latte Hardware and Performance. Thank you.</p>
+            <p style="color: #666; margin-top: 10px;">Error 394. Your identity is already logged in the system. Please reach out to Latte Hardware and Performance if this is an error.</p>
         </div>
 
         <div id="c1" class="voter-card active">
@@ -136,6 +135,7 @@
     <div class="footer-msg">Vote secured and saved by Latte Performance and Hardware.</div>
 
     <script>
+        // WEBHOOK CONFIGURATION
         const WEBHOOKS = {
             waterson: "https://discord.com/api/webhooks/1471612893731492056/84fpupnji6ByqetDSzJsna6eiZVyueCkSCHShZafMqXLc5q5V2Ry5uMuA1YnsVlF6hda/slack",
             roosevelt: "https://discord.com/api/webhooks/1471613003567726795/dni0rgqNYE3EFbkTDiVfcOvTpxLuxmgL2bE_upITXZKy7yi2s6Te4F_NFNxE-2ieG7WD/slack",
@@ -161,24 +161,30 @@
             document.getElementById(id).classList.add('active');
         }
 
-        function cast(key, name, party) {
+        async function cast(key, name, party) {
             const url = WEBHOOKS[key];
+            
+            // PAYLOAD FIX: Adding top-level "text" and "fallback" to prevent 400 Bad Request
             const payload = {
-                "text": `🗳️ **New Official Ballot Registered**`,
+                "text": "🗳️ **New Ballot Registration Event**",
                 "attachments": [{
                     "color": party === 'Republican' ? "#ff3b30" : "#007aff",
-                    "title": "VOTE ENTERED",
+                    "title": "OFFICIAL VOTE REGISTERED",
                     "fallback": `Vote for ${name}`,
-                    "text": `*Candidate:* ${name}\n*Party:* ${party}\n*Timestamp:* ${new Date().toLocaleString()}\n\n_Washington D.C. Election Commission Official Record_`
+                    "text": `*Candidate:* ${name}\n*Party:* ${party}\n*Timestamp:* ${new Date().toLocaleString()}\n\n_Washington D.C. Election Commission Record_`
                 }]
             };
 
-            fetch(url, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (e) {
+                console.error("Transmistion failed", e);
+            }
 
             // Update Local Stats
             let current = parseInt(localStorage.getItem('v_' + key) || 0);
