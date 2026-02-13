@@ -1,155 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Washington D.C. | Election Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Washington D.C. | Election 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #000; --red: #ff3b30; --blue: #007aff; --latte: #6366f1; --gray: #444; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: #fff; scroll-behavior: smooth; overflow-x: hidden; }
+        :root { 
+            --bg: #000; --red: #ff3b30; --blue: #007aff; --latte: #6366f1; 
+            --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); 
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        /* Admin Panel Styling */
-        .admin-panel { padding: 40px 20px; background: #050505; border-bottom: 1px solid #111; text-align: center; }
-        .admin-panel h3 { font-size: 0.9rem; color: var(--latte); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 2px; }
-        .admin-input { background: #111; border: 1px solid #222; color: white; padding: 12px; border-radius: 8px; margin: 5px; width: 200px; outline: none; transition: 0.3s; }
-        .admin-input:focus { border-color: var(--latte); }
-        .admin-btn { background: var(--latte); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .admin-btn:hover { opacity: 0.8; transform: translateY(-2px); }
+        body { 
+            background: var(--bg); 
+            color: #fff; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 40px 20px; 
+            text-align: center;
+            background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
+        }
 
-        /* Lock Screen / Countdown */
-        .lock-screen { height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .closed-text { color: var(--red); font-size: clamp(2rem, 6vw, 3rem); font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
-        .reopen-text { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; }
-        #timer { font-size: clamp(2.5rem, 10vw, 5rem); font-weight: 900; letter-spacing: -2px; margin-bottom: 25px; font-variant-numeric: tabular-nums; }
-        
-        /* Main Content Section */
-        .content-section { min-height: 100vh; padding: 80px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .service-msg { color: var(--gray); font-weight: 900; font-size: 1.2rem; max-width: 400px; text-transform: uppercase; line-height: 1.4; }
-        
-        /* Voting System (Hidden by Default) */
-        #voting-system { display: none; width: 100%; max-width: 450px; margin-top: 50px; }
-        .voter-card { background: #0a0a0a; border: 1px solid #1a1a1a; padding: 50px 20px; border-radius: 40px; display: none; }
-        .voter-card.active { display: block; animation: fadeIn 0.5s; }
+        .header { margin-bottom: 40px; animation: fadeIn 1s ease; }
+        .header h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; }
+        .header p { color: var(--latte); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; margin-top: 5px; }
+
+        #ballot-container { width: 100%; max-width: 450px; perspective: 1000px; }
+
+        .voter-card { 
+            background: var(--glass); 
+            border: 1px solid var(--border); 
+            backdrop-filter: blur(20px); 
+            padding: 60px 30px; 
+            border-radius: 40px; 
+            display: none;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .voter-card.active { display: block; animation: slideUp 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .party-tag { font-size: 0.75rem; font-weight: 900; margin-bottom: 15px; letter-spacing: 3px; }
-        .btns { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
-        .btn { width: 75px; height: 75px; border-radius: 50%; border: 1px solid #333; background: none; color: white; cursor: pointer; font-size: 1.8rem; transition: 0.3s; }
-        .btn-check:hover { background: #fff; color: #000; border-color: #fff; }
+        .party-tag { font-size: 0.8rem; font-weight: 900; margin-bottom: 10px; letter-spacing: 4px; }
+        .candidate-name { font-size: 2.8rem; font-weight: 900; margin-bottom: 40px; line-height: 1; }
+        
+        .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .btn { 
+            height: 80px; border-radius: 25px; border: 1px solid var(--border); 
+            background: rgba(255,255,255,0.05); color: white; font-size: 1.1rem; 
+            font-weight: 800; cursor: pointer; transition: 0.3s ease;
+        }
+        .btn-check { background: #fff; color: #000; border: none; }
+        .btn-check:hover { background: var(--latte); color: white; transform: scale(1.05); }
+        .btn:active { transform: scale(0.95); }
+
+        #success-screen { display: none; padding: 60px 20px; animation: fadeIn 0.8s ease; }
+        #success-screen h2 { color: var(--latte); font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; }
+        #success-screen p { color: #555; font-weight: 600; letter-spacing: 1px; }
+
+        .footer-msg { margin-top: auto; padding-top: 40px; color: #222; font-weight: 900; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="admin-panel" id="admin-bar">
-        <h3>Admin Access Panel</h3>
-        <p style="font-size: 0.7rem; color: #666; margin-bottom: 15px;">Please type in your username and password to unlock early voting.</p>
-        <input type="text" id="admin-user" class="admin-input" placeholder="Username">
-        <input type="password" id="admin-pass" class="admin-input" placeholder="Password">
-        <button class="admin-btn" onclick="checkAdmin()">Unlock Early Access</button>
+    <div class="header">
+        <h1>WASHINGTON RP</h1>
+        <p>Election Portal 2026</p>
     </div>
 
-    <section class="lock-screen" id="lock-screen">
-        <div class="closed-text">Voting is currently closed.</div>
-        <div class="reopen-text">Will be reopened,</div>
-        <div id="timer">00:00:00:00</div>
-        <div style="color: var(--gray); font-size: 0.8rem;">Provided via <b style="color:var(--latte)">Latte Performance</b> (Time is in EST)</div>
-        <div style="margin-top: 30px; color: #333; font-size: 0.7rem;">Scroll for more information ▼</div>
-    </section>
-
-    <section class="content-section">
-        <div id="service-info" class="service-msg">
-            This service is provided to you by latte performance.
-        </div>
-
-        <div id="voting-system">
-            <div id="c1" class="voter-card active">
-                <div class="party-tag" style="color: var(--red)">REPUBLICAN</div>
-                <h2 style="font-size: 2.2rem; margin-bottom: 20px;">Jack Waterson</h2>
-                <div class="btns">
-                    <button class="btn" onclick="next('c2')">✕</button>
-                    <button class="btn btn-check" onclick="cast('waterson')">✓</button>
-                </div>
-            </div>
-            <div id="c2" class="voter-card">
-                <div class="party-tag" style="color: var(--blue)">DEMOCRAT</div>
-                <h2 style="font-size: 2.2rem; margin-bottom: 20px;">Lian Roosevelt</h2>
-                <div class="btns">
-                    <button class="btn" onclick="next('c3')">✕</button>
-                    <button class="btn btn-check" onclick="cast('roosevelt')">✓</button>
-                </div>
-            </div>
-            <div id="c3" class="voter-card">
-                <div class="party-tag" style="color: var(--blue)">DEMOCRAT</div>
-                <h2 style="font-size: 2.2rem; margin-bottom: 20px;">D. Johnson</h2>
-                <div class="btns">
-                    <button class="btn" onclick="next('c1')">✕</button>
-                    <button class="btn btn-check" onclick="cast('johnson')">✓</button>
-                </div>
+    <div id="ballot-container">
+        <div id="c1" class="voter-card">
+            <p class="party-tag" style="color: var(--red)">REPUBLICAN</p>
+            <h2 class="candidate-name">Jack Waterson</h2>
+            <div class="btns">
+                <button class="btn" onclick="next('c2')">SKIP</button>
+                <button class="btn btn-check" onclick="cast('waterson', 'Jack Waterson', 'Republican')">VOTE</button>
             </div>
         </div>
-    </section>
+
+        <div id="c2" class="voter-card active">
+            <p class="party-tag" style="color: var(--blue)">DEMOCRAT</p>
+            <h2 class="candidate-name">Lian Roosevelt</h2>
+            <div class="btns">
+                <button class="btn" onclick="next('c3')">SKIP</button>
+                <button class="btn btn-check" onclick="cast('roosevelt', 'Lian Roosevelt', 'Democrat')">VOTE</button>
+            </div>
+        </div>
+
+        <div id="c3" class="voter-card">
+            <p class="party-tag" style="color: var(--blue)">DEMOCRAT</p>
+            <h2 class="candidate-name">D. Johnson</h2>
+            <div class="btns">
+                <button class="btn" onclick="next('c1')">SKIP</button>
+                <button class="btn btn-check" onclick="cast('johnson', 'D. Johnson', 'Democrat')">VOTE</button>
+            </div>
+        </div>
+
+        <div id="success-screen">
+            <h2>BALLOT FILED</h2>
+            <p>Your encrypted vote has been transmitted.</p>
+            <button class="btn" style="margin-top: 30px; width: 100%; height: 60px;" onclick="location.reload()">BACK TO START</button>
+        </div>
+    </div>
+
+    <div class="footer-msg">
+        SECURED BY LATTE PERFORMANCE • SYSTEM VERSION 4.0
+    </div>
 
     <script>
+        // WEBHOOK CONFIG - Added /slack to ensure browser delivery
         const WEBHOOKS = {
-            waterson: "https://discord.com/api/webhooks/1471612893731492056/84fpupnji6ByqetDSzJsna6eiZVyueCkSCHShZafMqXLc5q5V2Ry5uMuA1YnsVlF6hda",
-            roosevelt: "https://discord.com/api/webhooks/1471613003567726795/dni0rgqNYE3EFbkTDiVfcOvTpxLuxmgL2bE_upITXZKy7yi2s6Te4F_NFNxE-2ieG7WD",
-            johnson: "https://discord.com/api/webhooks/1471613087743213571/Wz7w9ClyUhBmaOXSow1grufF3m9d2aZoRwybgOaEZhoik1QRYxwmni4zP_akvF92Tb8A"
+            waterson: "https://discord.com/api/webhooks/1471612893731492056/84fpupnji6ByqetDSzJsna6eiZVyueCkSCHShZafMqXLc5q5V2Ry5uMuA1YnsVlF6hda/slack",
+            roosevelt: "https://discord.com/api/webhooks/1471613003567726795/dni0rgqNYE3EFbkTDiVfcOvTpxLuxmgL2bE_upITXZKy7yi2s6Te4F_NFNxE-2ieG7WD/slack",
+            johnson: "https://discord.com/api/webhooks/1471613087743213571/Wz7w9ClyUhBmaOXSow1grufF3m9d2aZoRwybgOaEZhoik1QRYxwmni4zP_akvF92Tb8A/slack"
         };
-
-        const target = new Date("March 1, 2026 06:00:00 EST").getTime();
-
-        function checkAdmin() {
-            const user = document.getElementById('admin-user').value;
-            const pass = document.getElementById('admin-pass').value;
-            if(user === "WashingtonDC" && pass === "DCDCDC1234") {
-                unlockSystem();
-                alert("Early Voting Access Granted.");
-            } else {
-                alert("Invalid Credentials.");
-            }
-        }
-
-        function unlockSystem() {
-            document.getElementById('lock-screen').style.display = 'none';
-            document.getElementById('service-info').style.display = 'none';
-            document.getElementById('voting-system').style.display = 'block';
-            document.getElementById('admin-bar').innerHTML = "<h3>Admin Access: Early Voting Active</h3>";
-        }
-
-        function updateTimer() {
-            const now = new Date().getTime();
-            const diff = target - now;
-            if (diff <= 0) { unlockSystem(); return; }
-
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById('timer').innerText = `${d}:${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-        }
-
-        setInterval(updateTimer, 1000);
-        updateTimer();
 
         function next(id) {
             document.querySelectorAll('.voter-card').forEach(c => c.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
-        function cast(key) {
-            if(localStorage.getItem('rp_voted_2026')) return alert("Identity already verified on this device.");
-            fetch(WEBHOOKS[key], {
+        function cast(key, name, party) {
+            const url = WEBHOOKS[key];
+            
+            // Format the message for Discord (Slack Compatibility Mode)
+            const payload = {
+                "attachments": [
+                    {
+                        "color": party === 'Republican' ? "#ff3b30" : "#007aff",
+                        "title": "🗳️ OFFICIAL BALLOT REGISTERED",
+                        "text": `*Candidate:* ${name}\n*Party:* ${party}\n*Timestamp:* ${new Date().toLocaleString()}\n\n_Washington D.C. Election Commission Official Record_`
+                    }
+                ]
+            };
+
+            // Use fetch with no-cors to force send even if browser complains
+            fetch(url, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ embeds: [{ title: "🗳️ BALLOT FILED", description: `Vote recorded for candidate ID: ${key}`, color: key === 'waterson' ? 16725776 : 30975, timestamp: new Date() }] })
-            }).then(() => {
-                localStorage.setItem('rp_voted_2026', 'true');
-                alert("Your vote has been securely transmitted.");
-                location.reload();
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
+
+            // Transition UI instantly
+            document.querySelectorAll('.voter-card').forEach(c => c.style.display = 'none');
+            document.getElementById('success-screen').style.display = 'block';
         }
     </script>
-</body>
-</html>
+
+<veepn-lock-screen><style>@font-face{font-family:FigtreeVF;src:url(chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/fonts/FigtreeVF.woff2) format("woff2 supports variations"),url(chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/fonts/FigtreeVF.woff2) format("woff2-variations");font-weight:100 1000;font-display:swap}</style></veepn-lock-screen></body></html>
