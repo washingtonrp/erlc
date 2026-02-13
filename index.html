@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Washington D.C. | Presidential Election 2026</title>
+    <title>Washington D.C. | Election 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #000; --red: #ff3b30; --blue: #007aff; --latte: #6366f1; --border: rgba(255,255,255,0.1); }
@@ -28,18 +28,33 @@
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* THE SHAKING ANIMATION */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
         .candidate-name { font-size: 2.5rem; font-weight: 900; margin-bottom: 40px; line-height: 1; }
         .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
         .btn { 
             height: 75px; border-radius: 20px; border: 1px solid var(--border); 
             background: rgba(255,255,255,0.05); color: white; font-size: 1.1rem; 
             font-weight: 800; cursor: pointer; transition: 0.2s;
         }
+        
         .btn-check { background: #fff; color: #000; border: none; }
-        .btn:hover { transform: translateY(-3px); background: rgba(255,255,255,0.1); }
-        .btn-check:hover { background: var(--latte); color: #fff; }
+        .btn-check:hover { 
+            background: var(--latte); 
+            color: #fff; 
+            animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
 
-        #success { display: none; }
+        #success, #already-voted { display: none; }
     </style>
 </head>
 <body>
@@ -80,8 +95,12 @@
 
     <div id="success">
         <h1 style="color: var(--latte); font-size: 3.5rem; font-weight: 900;">VOTE LOGGED</h1>
-        <p style="color: #444; font-weight: 700; letter-spacing: 1px;">ENCRYPTED RECEIPT GENERATED</p>
-        <button class="btn" style="margin-top: 30px; width: 200px;" onclick="location.reload()">RESTART</button>
+        <p style="color: #444; font-weight: 700;">TRANSMISSION COMPLETE</p>
+    </div>
+
+    <div id="already-voted">
+        <h1 style="color: #ff3b30; font-size: 2.5rem; font-weight: 900;">ACCESS DENIED</h1>
+        <p style="color: #444; font-weight: 700;">YOU HAVE ALREADY CAST A BALLOT.</p>
     </div>
 
     <script>
@@ -91,14 +110,24 @@
             johnson: "https://discord.com/api/webhooks/1471613087743213571/Wz7w9ClyUhBmaOXSow1grufF3m9d2aZoRwybgOaEZhoik1QRYxwmni4zP_akvF92Tb8A"
         };
 
+        // --- PREVENT RE-VOTING LOGIC ---
+        window.onload = function() {
+            if (localStorage.getItem("hasVoted") === "true") {
+                document.getElementById('ballot-box').style.display = 'none';
+                document.getElementById('already-voted').style.display = 'block';
+            }
+        };
+
         function next(id) {
             document.querySelectorAll('.voter-card').forEach(c => c.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
         async function cast(key, name, party) {
+            // Save to browser so they can't vote again
+            localStorage.setItem("hasVoted", "true");
+
             const url = WEBHOOKS[key];
-            
             const payload = {
                 content: "🗳️ **NEW OFFICIAL BALLOT**",
                 embeds: [{
@@ -113,16 +142,11 @@
                 }]
             };
 
-            // GitHub Pages allows clean Fetch requests!
-            try {
-                await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-            } catch (e) {
-                console.log("Transmission sent."); 
-            }
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).catch(() => {});
 
             document.getElementById('ballot-box').style.display = 'none';
             document.getElementById('success').style.display = 'block';
