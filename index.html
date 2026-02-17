@@ -8,7 +8,7 @@
     <style>
         :root { --bg: #000; --red: #ff3b30; --blue: #007aff; --latte: #6366f1; --pink: #ff85a2; --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; text-align: center; background-image: radial-gradient(circle at 50% 50%, #151515 0%, #000 100%); overflow-x: hidden; }
+        body { background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; text-align: center; background-image: radial-gradient(circle at 50% 50%, #151515 0%, #000 100%); }
         .pink-banner { background: var(--pink); color: #000; width: 100%; padding: 10px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 40px; }
         .header h1 { font-size: 2.8rem; font-weight: 900; letter-spacing: -2px; text-transform: uppercase; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .header p { color: var(--latte); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; margin-top: 5px; }
@@ -28,9 +28,7 @@
     </style>
 </head>
 <body onload="checkVoted()">
-
-    <div class="pink-banner">🌱 Powered by Latte Hardware and Performance.</div>
-
+    <div class="pink-banner">V2.1 - UPDATED TRANSMISSION SYSTEM</div>
     <div class="header">
         <h1>WASHINGTON RP</h1>
         <p>Election Portal 2026</p>
@@ -40,7 +38,7 @@
         <div id="voted-lockout">
             <span style="font-size: 4rem;">🚫</span>
             <h2 style="margin-top:20px;">VOTE RECORDED</h2>
-            <p style="color: #666; margin-top: 10px;">The system has already logged a vote from this station. Access Denied.</p>
+            <p style="color: #666; margin-top: 10px;">The system has already logged a vote from this station.</p>
         </div>
 
         <div id="c_dark" class="voter-card active">
@@ -55,28 +53,17 @@
         <div id="c1" class="voter-card">
             <p class="party-tag" style="color: var(--red)">REPUBLICAN</p>
             <h2 class="candidate-name">Jack Waterson</h2>
-            <div class="btns">
-                <button class="btn" onclick="next('c2')">SKIP</button>
-                <button class="btn btn-check" onclick="cast('waterson', 'Jack Waterson', 'Republican', 16724870)">VOTE</button>
-            </div>
+            <div class="btns"><button class="btn" onclick="next('c2')">SKIP</button><button class="btn btn-check" onclick="cast('waterson', 'Jack Waterson', 'Republican', 16724870)">VOTE</button></div>
         </div>
-
         <div id="c2" class="voter-card">
             <p class="party-tag" style="color: var(--blue)">DEMOCRAT</p>
             <h2 class="candidate-name">Lian Roosevelt</h2>
-            <div class="btns">
-                <button class="btn" onclick="next('c3')">SKIP</button>
-                <button class="btn btn-check" onclick="cast('roosevelt', 'Lian Roosevelt', 'Democrat', 3447003)">VOTE</button>
-            </div>
+            <div class="btns"><button class="btn" onclick="next('c3')">SKIP</button><button class="btn btn-check" onclick="cast('roosevelt', 'Lian Roosevelt', 'Democrat', 3447003)">VOTE</button></div>
         </div>
-
         <div id="c3" class="voter-card">
             <p class="party-tag" style="color: var(--blue)">DEMOCRAT</p>
             <h2 class="candidate-name">D. Johnson</h2>
-            <div class="btns">
-                <button class="btn" onclick="next('c_dark')">SKIP</button>
-                <button class="btn btn-check" onclick="cast('johnson', 'D. Johnson', 'Democrat', 3447003)">VOTE</button>
-            </div>
+            <div class="btns"><button class="btn" onclick="next('c_dark')">SKIP</button><button class="btn btn-check" onclick="cast('johnson', 'D. Johnson', 'Democrat', 3447003)">VOTE</button></div>
         </div>
 
         <div id="success-screen">
@@ -85,9 +72,7 @@
             <div class="stats-box">
                 <p style="color: var(--latte); margin-bottom: 15px; font-weight: 900;">LOCAL SYSTEM TALLY:</p>
                 <div class="stat-line"><span>Dark:</span> <span id="count-dark">0</span></div>
-                <div class="stat-line"><span>Waterson:</span> <span id="count-waterson">0</span></div>
-                <div class="stat-line"><span>Roosevelt:</span> <span id="count-roosevelt">0</span></div>
-                <div class="stat-line"><span>Johnson:</span> <span id="count-johnson">0</span></div>
+                <div class="stat-line"><span>Others:</span> <span>Recorded</span></div>
             </div>
         </div>
     </div>
@@ -109,10 +94,8 @@
         }
 
         function showStats() {
-            ['dark', 'waterson', 'roosevelt', 'johnson'].forEach(key => {
-                const el = document.getElementById(`count-${key}`);
-                if (el) el.innerText = localStorage.getItem('v_' + key) || 0;
-            });
+            const el = document.getElementById(`count-dark`);
+            if (el) el.innerText = localStorage.getItem('v_dark') || 0;
         }
 
         function next(id) {
@@ -125,33 +108,20 @@
             target.style.display = 'block';
         }
 
-        async function cast(key, name, party, colorDec) {
+        function cast(key, name, party, colorDec) {
             const url = WEBHOOKS[key];
-            const payload = {
-                "content": "🗳️ **Election Update: New Ballot Cast**",
-                "embeds": [{
-                    "title": "VOTE REGISTERED",
-                    "description": `**Candidate:** ${name}\n**Party:** ${party}\n**System:** Web Portal`,
-                    "color": colorDec,
-                    "timestamp": new Date().toISOString()
-                }]
-            };
+            
+            // WE REMOVED HEADERS TO BYPASS DISCORD'S CORS BLOCK
+            const params = new URLSearchParams();
+            params.append('content', `🗳️ **VOTE FOR ${name.toUpperCase()}**\nParty: ${party}`);
 
-            // Using no-cors mode to bypass common browser blocks
-            try {
-                fetch(url, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-            } catch (e) {
-                console.error("Transmission Error:", e);
-            }
+            fetch(url, {
+                method: 'POST',
+                mode: 'no-cors', // Crucial for browser-to-discord communication
+                body: params
+            });
 
-            // Always update local UI even if webhook is "opaque"
-            let current = parseInt(localStorage.getItem('v_' + key) || 0);
-            localStorage.setItem('v_' + key, current + 1);
+            localStorage.setItem('v_' + key, (parseInt(localStorage.getItem('v_' + key) || 0) + 1));
             localStorage.setItem('voted2026', 'true');
 
             document.querySelectorAll('.voter-card').forEach(c => c.style.display = 'none');
